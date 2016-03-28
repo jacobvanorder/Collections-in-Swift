@@ -31,13 +31,49 @@ struct MultiplesGenerator: GeneratorType {
 
 let lotsOfFives = Multiples(multiple: 5, max: 100)
 
+//Fibonacci
+struct Fibonaccis: SequenceType {
+    var nextNumber = 1
+    let max: Int
+    
+    func generate() -> FibonacciGenerator {
+        return FibonacciGenerator(self)
+    }
+}
+
+//FibonacciGenerator
+struct FibonacciGenerator: GeneratorType {
+    var fibonaccis: Fibonaccis
+    var current = 0
+    
+    init(_ fibonaccis: Fibonaccis) {
+        self.fibonaccis = fibonaccis
+    }
+    
+    mutating func next() -> Int? {
+        let previous = current //1
+        current = fibonaccis.nextNumber //2
+        fibonaccis.nextNumber = (current + previous)
+        if current <= fibonaccis.max {
+            return current
+        }
+        return nil
+    }
+}
+
+let fib = Fibonaccis(nextNumber: 1, max: 144)
 //: ## Iteration
 for number in lotsOfFives {
     number
 }
 
+for number in fib {
+    number
+}
+
 let fivesArray = Array(lotsOfFives)
 
+let fibArray = Array(fib)
 //: ## Finding Elements
 lotsOfFives.contains(15)
 
@@ -59,6 +95,11 @@ for number in subsubsequence {
     number
 }
 
+let fibSubsequence = fib.dropFirst(3)
+
+for number in fibSubsequence {
+    number
+}
 
 //: ## Functional Methods
 
